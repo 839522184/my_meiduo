@@ -56,7 +56,7 @@ var vm = new Vue({
             }
             return null;
         },
-          next_operate: function(){
+         next_operate: function(){
             if (this.pay_method == 1) {
                 location.href = '/index.html';
             } else {
