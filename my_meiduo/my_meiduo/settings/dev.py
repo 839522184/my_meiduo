@@ -10,10 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 获取apps包的路径
+apps_path = os.path.join(BASE_DIR, 'apps')
+# 把apps的路径添加到默认导包路径
+sys.path.insert(0, apps_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +30,10 @@ SECRET_KEY = 'j$^%-$l20w#0f=un@5++%*y=k*on%qhc2fo_1qp*qx*w9d76f3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.meiduo.site',
+                 '127.0.0.1',
+                 'localhost',
+                 'www.meiduo.site']
 
 
 # Application definition
@@ -37,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 注册用户模块
+    'users.apps.UsersConfig',
+    # 添加 django-cors-headers 使其可以进行 cors 跨域
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +59,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 添加 django-cors-headers 使其可以进行 cors 跨域
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# CORS跨域请求白名单设置
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+    'http://www.meiduo.site:8080',
+)
+CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
 ROOT_URLCONF = 'my_meiduo.urls'
 
@@ -187,5 +209,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 指定本项目使用我们自定义的模型类:
+AUTH_USER_MODEL = 'users.User'
 
 
